@@ -85,7 +85,10 @@ void fill(unsigned char dat1,unsigned char dat2)
 
 void setup()   {                
   Serial.begin(9600);
-  Serial.println("SSD1305 OLED test");
+  Serial.print("SSD1305 OLED test.  Width: ");
+  Serial.print(display.width());
+  Serial.print(" Height: ");
+  Serial.println(display.height());
   
   // by default, we'll generate the high voltage from the 3.3v line internally! (neat!)
   display.begin();
@@ -188,19 +191,21 @@ void setup()   {
 }
 
 
-void loop() {
+void loop() 
+{
 }
 
 
-void testdrawbitmap(const uint8_t *bitmap, uint8_t w, uint8_t h) {
+void testdrawbitmap(const uint8_t *bitmap, uint8_t w, uint8_t h) 
+{
   uint8_t icons[NUMFLAKES][3];
-  srandom(666);     // whatever seed
+  randomSeed(666);     // whatever seed
  
   // initialize
   for (uint8_t f=0; f< NUMFLAKES; f++) {
-    icons[f][XPOS] = random() % display.width();
+    icons[f][XPOS] = random(display.width());
     icons[f][YPOS] = 0;
-    icons[f][DELTAY] = random() % 5 + 1;
+    icons[f][DELTAY] = random(1,6);
     
     Serial.print("x: ");
     Serial.print(icons[f][XPOS], DEC);
@@ -224,10 +229,11 @@ void testdrawbitmap(const uint8_t *bitmap, uint8_t w, uint8_t h) {
       // move it
       icons[f][YPOS] += icons[f][DELTAY];
       // if its gone, reinit
-      if (icons[f][YPOS] > display.height()) {
-	icons[f][XPOS] = random() % display.width();
-	icons[f][YPOS] = 0;
-	icons[f][DELTAY] = random() % 5 + 1;
+      if (icons[f][YPOS] > display.height()) 
+      {
+	      icons[f][XPOS] = random(display.width());
+	      icons[f][YPOS] = 0;
+	      icons[f][DELTAY] = random(1,6);
       }
     }
    }
